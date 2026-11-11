@@ -61,6 +61,7 @@ const allowed = [
   /^https:\/\/share(ous1|2)?\.dexcom\.com\//, // Dexcom edition permission text
   /^https:\/\/share\.dexcom\.jp\//, // Dexcom edition permission text
   /^https:\/\/github\.com\/ErdalBirinci\/Sokeri\/?$/, // public repo link
+  /^https:\/\/wise\.com\/pay\/me\/erdalb143\/?$/, // donation link
 ];
 for (const url of externals) {
   if (allowed.some((re) => re.test(url))) ok(`allowed: ${url}`);
