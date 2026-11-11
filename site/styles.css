@@ -1502,6 +1502,11 @@ code {
   color: var(--accent);
 }
 
+.donate-note {
+  text-align: center;
+  margin-top: 1rem;
+}
+
 /* ================================================= comparison table */
 
 .table-wrap {
