@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Sokeri",
   "version": "1.1.0",
-  "description": "Sokeri: sign in with your LibreView account and follow your FreeStyle Libre glucose readings in the browser: live value, trend arrow, chart and threshold alerts.",
+  "description": "Live FreeStyle Libre glucose in your browser: value badge, trend arrow, charts and threshold alerts.",
   "minimum_chrome_version": "116",
   "permissions": ["storage", "alarms", "notifications", "offscreen"],
   "host_permissions": ["https://*.libreview.io/*"],
