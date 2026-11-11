@@ -24,6 +24,23 @@ edition manuals.
 
 ---
 
+## Screenshots
+
+Sample data. Dark theme, light theme, settings, reports, Dexcom multi-account
+and the full-tab clinic mode:
+
+| Dashboard (dark) | Dashboard (light) | Settings |
+| --- | --- | --- |
+| ![Dashboard, dark theme](docs/screenshots/dashboard-dark.png) | ![Dashboard, light theme](docs/screenshots/dashboard-light.png) | ![Settings view](docs/screenshots/settings-dark.png) |
+
+| Reports (TIR, pattern, PDF, clinic) | Dexcom settings (multi-account) |
+| --- | --- |
+| ![Reports view](docs/screenshots/reports-dark.png) | ![Dexcom settings with account switcher](docs/screenshots/dexcom-settings.png) |
+
+![Clinic mode](docs/screenshots/clinic-mode.png)
+
+---
+
 ## Folders
 
 ```
