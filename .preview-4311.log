@@ -1,0 +1,152 @@
+::1 - - [11/Nov/2026 01:39:30] "GET /index.html HTTP/1.1" 200 -
+::1 - - [11/Nov/2026 01:39:33] "GET /index.html HTTP/1.1" 200 -
+----------------------------------------
+Exception occurred during processing of request from ('::ffff:127.0.0.1', 49674, 0, 0)
+Traceback (most recent call last):
+  File "C:\Users\Erdal Birinci\AppData\Local\Python\pythoncore-3.14-64\Lib\socketserver.py", line 697, in process_request_thread
+    self.finish_request(request, client_address)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Erdal Birinci\AppData\Local\Python\pythoncore-3.14-64\Lib\http\server.py", line 1422, in finish_request
+    self.RequestHandlerClass(request, client_address, self,
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                             directory=args.directory)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Erdal Birinci\AppData\Local\Python\pythoncore-3.14-64\Lib\http\server.py", line 732, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Erdal Birinci\AppData\Local\Python\pythoncore-3.14-64\Lib\socketserver.py", line 766, in __init__
+    self.handle()
+    ~~~~~~~~~~~^^
+  File "C:\Users\Erdal Birinci\AppData\Local\Python\pythoncore-3.14-64\Lib\http\server.py", line 496, in handle
+    self.handle_one_request()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Erdal Birinci\AppData\Local\Python\pythoncore-3.14-64\Lib\http\server.py", line 464, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+                           ~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "C:\Users\Erdal Birinci\AppData\Local\Python\pythoncore-3.14-64\Lib\socket.py", line 725, in readinto
+    return self._sock.recv_into(b)
+           ~~~~~~~~~~~~~~~~~~~~^^^
+ConnectionResetError: [WinError 10054] An existing connection was forcibly closed by the remote host
+----------------------------------------
+::1 - - [11/Nov/2026 01:39:34] "GET /index.html HTTP/1.1" 200 -
+::1 - - [11/Nov/2026 01:39:34] "GET /styles.css HTTP/1.1" 200 -
+::1 - - [11/Nov/2026 01:39:34] "GET /assets/hero-sensor.svg HTTP/1.1" 200 -
+::1 - - [11/Nov/2026 01:39:34] "GET /assets/feature-alert.svg HTTP/1.1" 200 -
+::1 - - [11/Nov/2026 01:39:34] "GET /assets/icon48.png HTTP/1.1" 200 -
+::1 - - [11/Nov/2026 01:39:34] "GET /main.js HTTP/1.1" 200 -
+::1 - - [11/Nov/2026 01:39:34] "GET /assets/icon32.png HTTP/1.1" 200 -
+::1 - - [11/Nov/2026 01:39:34] "GET /assets/icon128.png HTTP/1.1" 200 -
+::1 - - [11/Nov/2026 01:40:04] "GET /libre-glucose-monitor.zip HTTP/1.1" 200 -
+::1 - - [11/Nov/2026 01:40:08] "GET /libre-glucose-monitor.zip HTTP/1.1" 200 -
+::1 - - [11/Nov/2026 01:40:13] "GET /index.html HTTP/1.1" 200 -
+::1 - - [11/Nov/2026 01:40:23] "GET /index.html HTTP/1.1" 200 -
+::1 - - [11/Nov/2026 01:40:28] "GET /index.html HTTP/1.1" 200 -
+::1 - - [11/Nov/2026 01:40:37] "GET /index.html HTTP/1.1" 200 -
+::1 - - [11/Nov/2026 01:55:10] "GET /index.html HTTP/1.1" 304 -
+::1 - - [11/Nov/2026 01:55:10] "GET /styles.css HTTP/1.1" 304 -
+::1 - - [11/Nov/2026 01:55:10] "GET /main.js HTTP/1.1" 304 -
+::1 - - [11/Nov/2026 01:55:10] "GET /assets/icon48.png HTTP/1.1" 304 -
+::1 - - [11/Nov/2026 01:55:10] "GET /assets/hero-sensor.svg HTTP/1.1" 304 -
+::1 - - [11/Nov/2026 01:55:10] "GET /assets/icon32.png HTTP/1.1" 304 -
+::1 - - [11/Nov/2026 01:55:10] "GET /assets/icon128.png HTTP/1.1" 304 -
+::1 - - [11/Nov/2026 01:57:29] "GET /index.html HTTP/1.1" 200 -
+::1 - - [11/Nov/2026 01:57:29] "GET /styles.css HTTP/1.1" 200 -
+::1 - - [11/Nov/2026 01:57:29] "GET /main.js HTTP/1.1" 200 -
+::1 - - [11/Nov/2026 01:57:29] "GET /assets/hero-sensor.svg HTTP/1.1" 304 -
+::1 - - [11/Nov/2026 01:58:08] "GET /index.html HTTP/1.1" 304 -
+::1 - - [11/Nov/2026 01:58:08] "GET /styles.css HTTP/1.1" 200 -
+::1 - - [11/Nov/2026 01:58:08] "GET /main.js HTTP/1.1" 304 -
+::1 - - [11/Nov/2026 01:58:32] "GET /index.html HTTP/1.1" 200 -
+::1 - - [11/Nov/2026 01:58:32] "GET /styles.css HTTP/1.1" 200 -
+::1 - - [11/Nov/2026 01:58:32] "GET /main.js HTTP/1.1" 304 -
+::1 - - [11/Nov/2026 01:59:01] "GET /index.html HTTP/1.1" 304 -
+::1 - - [11/Nov/2026 01:59:01] "GET /styles.css HTTP/1.1" 200 -
+::1 - - [11/Nov/2026 01:59:01] "GET /main.js HTTP/1.1" 304 -
+::1 - - [11/Nov/2026 02:00:14] "GET /index.html HTTP/1.1" 200 -
+::1 - - [11/Nov/2026 02:00:14] "GET /styles.css HTTP/1.1" 200 -
+::1 - - [11/Nov/2026 02:00:14] "GET /main.js HTTP/1.1" 304 -
+::1 - - [11/Nov/2026 02:00:14] "GET /assets/hero-sensor.svg HTTP/1.1" 304 -
+::1 - - [11/Nov/2026 02:01:00] "GET /index.html HTTP/1.1" 200 -
+::1 - - [11/Nov/2026 02:01:00] "GET /styles.css HTTP/1.1" 200 -
+::1 - - [11/Nov/2026 02:01:00] "GET /main.js HTTP/1.1" 304 -
+::1 - - [11/Nov/2026 02:01:21] "GET /index.html HTTP/1.1" 200 -
+::1 - - [11/Nov/2026 02:01:21] "GET /styles.css HTTP/1.1" 304 -
+::1 - - [11/Nov/2026 02:01:50] "GET /index.html HTTP/1.1" 304 -
+::1 - - [11/Nov/2026 02:01:50] "GET /styles.css HTTP/1.1" 304 -
+::1 - - [11/Nov/2026 02:01:50] "GET /main.js HTTP/1.1" 304 -
+::1 - - [11/Nov/2026 02:02:17] "GET /index.html HTTP/1.1" 304 -
+::1 - - [11/Nov/2026 02:02:17] "GET /styles.css HTTP/1.1" 200 -
+::1 - - [11/Nov/2026 02:02:17] "GET /main.js HTTP/1.1" 304 -
+::1 - - [11/Nov/2026 02:02:40] "GET /index.html HTTP/1.1" 304 -
+::1 - - [11/Nov/2026 02:02:40] "GET /styles.css HTTP/1.1" 200 -
+::1 - - [11/Nov/2026 02:02:47] "GET /assets/hero-sensor.svg HTTP/1.1" 304 -
+::1 - - [11/Nov/2026 02:02:51] "GET /index.html HTTP/1.1" 304 -
+::1 - - [11/Nov/2026 02:02:51] "GET /styles.css HTTP/1.1" 304 -
+::1 - - [11/Nov/2026 02:02:51] "GET /main.js HTTP/1.1" 304 -
+::1 - - [11/Nov/2026 02:03:43] "GET /index.html HTTP/1.1" 304 -
+::1 - - [11/Nov/2026 02:03:43] "GET /styles.css HTTP/1.1" 200 -
+::1 - - [11/Nov/2026 02:03:43] "GET /main.js HTTP/1.1" 304 -
+::1 - - [11/Nov/2026 02:04:03] "GET /index.html HTTP/1.1" 304 -
+::1 - - [11/Nov/2026 02:04:03] "GET /styles.css HTTP/1.1" 304 -
+::1 - - [11/Nov/2026 02:04:11] "GET /index.html?v=3 HTTP/1.1" 200 -
+::1 - - [11/Nov/2026 02:04:11] "GET /styles.css HTTP/1.1" 304 -
+::1 - - [11/Nov/2026 02:04:51] "GET /main.js?probe=1794355491103 HTTP/1.1" 200 -
+::1 - - [11/Nov/2026 02:05:23] "GET /main.js?x=1794355523851 HTTP/1.1" 200 -
+::1 - - [11/Nov/2026 02:05:41] "GET /index.html?fresh=1 HTTP/1.1" 200 -
+::1 - - [11/Nov/2026 02:05:41] "GET /styles.css HTTP/1.1" 304 -
+::1 - - [11/Nov/2026 02:05:41] "GET /main.js HTTP/1.1" 200 -
+::1 - - [11/Nov/2026 02:05:41] "GET /assets/hero-sensor.svg HTTP/1.1" 304 -
+::1 - - [11/Nov/2026 02:05:53] "GET /assets/feature-alert.svg HTTP/1.1" 304 -
+::1 - - [11/Nov/2026 02:06:01] "GET /index.html?fresh=2 HTTP/1.1" 200 -
+::1 - - [11/Nov/2026 02:06:01] "GET /main.js HTTP/1.1" 304 -
+::1 - - [11/Nov/2026 02:06:01] "GET /styles.css HTTP/1.1" 304 -
+::1 - - [11/Nov/2026 02:06:47] "GET /index.html?fresh=3 HTTP/1.1" 200 -
+::1 - - [11/Nov/2026 02:06:47] "GET /styles.css HTTP/1.1" 200 -
+::1 - - [11/Nov/2026 02:06:47] "GET /main.js HTTP/1.1" 200 -
+::1 - - [11/Nov/2026 02:07:09] "GET /index.html HTTP/1.1" 304 -
+::1 - - [11/Nov/2026 02:07:09] "GET /styles.css HTTP/1.1" 304 -
+::1 - - [11/Nov/2026 02:07:09] "GET /main.js HTTP/1.1" 304 -
+::1 - - [11/Nov/2026 02:07:18] "GET /index.html HTTP/1.1" 200 -
+::1 - - [11/Nov/2026 02:14:28] "GET /libre-glucose-monitor.zip HTTP/1.1" 200 -
+::1 - - [11/Nov/2026 02:43:13] "GET /index.html HTTP/1.1" 200 -
+::1 - - [11/Nov/2026 02:51:02] "GET /index.html HTTP/1.1" 200 -
+::1 - - [11/Nov/2026 02:51:02] "GET /styles.css HTTP/1.1" 200 -
+::1 - - [11/Nov/2026 02:51:02] "GET /assets/feature-alert.svg HTTP/1.1" 304 -
+::1 - - [11/Nov/2026 02:51:02] "GET /assets/hero-sensor.svg HTTP/1.1" 304 -
+::1 - - [11/Nov/2026 02:51:02] "GET /assets/icon48.png HTTP/1.1" 304 -
+::1 - - [11/Nov/2026 02:51:02] "GET /main.js HTTP/1.1" 200 -
+::1 - - [11/Nov/2026 02:51:02] "GET /assets/icon32.png HTTP/1.1" 304 -
+::1 - - [11/Nov/2026 02:51:02] "GET /assets/icon128.png HTTP/1.1" 304 -
+::1 - - [11/Nov/2026 02:51:24] "GET /sokeri-chrome-extension.zip HTTP/1.1" 200 -
+::1 - - [11/Nov/2026 02:51:24] code 404, message File not found
+::1 - - [11/Nov/2026 02:51:24] "GET /libre-glucose-monitor.zip HTTP/1.1" 404 -
+::1 - - [11/Nov/2026 02:52:35] "GET /index.html HTTP/1.1" 304 -
+::1 - - [11/Nov/2026 02:52:35] "GET /styles.css HTTP/1.1" 304 -
+::1 - - [11/Nov/2026 02:52:35] "GET /main.js HTTP/1.1" 304 -
+::1 - - [11/Nov/2026 03:08:24] "GET /index.html HTTP/1.1" 200 -
+::1 - - [11/Nov/2026 03:08:32] "GET /index.html HTTP/1.1" 200 -
+::1 - - [11/Nov/2026 03:08:32] "GET /assets/brand-libre.svg HTTP/1.1" 200 -
+::1 - - [11/Nov/2026 03:08:32] "GET /styles.css HTTP/1.1" 200 -
+::1 - - [11/Nov/2026 03:08:32] "GET /assets/brand-dexcom.svg HTTP/1.1" 200 -
+::1 - - [11/Nov/2026 03:08:32] "GET /main.js HTTP/1.1" 304 -
+::1 - - [11/Nov/2026 03:08:32] "GET /assets/hero-sensor.svg HTTP/1.1" 304 -
+::1 - - [11/Nov/2026 03:08:32] "GET /assets/feature-alert.svg HTTP/1.1" 304 -
+::1 - - [11/Nov/2026 03:09:35] "GET /index.html HTTP/1.1" 200 -
+::1 - - [11/Nov/2026 03:09:35] "GET /styles.css HTTP/1.1" 304 -
+::1 - - [11/Nov/2026 03:09:35] "GET /assets/brand-libre.svg HTTP/1.1" 304 -
+::1 - - [11/Nov/2026 03:09:35] "GET /assets/brand-dexcom.svg HTTP/1.1" 304 -
+::1 - - [11/Nov/2026 03:11:10] "GET /index.html HTTP/1.1" 200 -
+::1 - - [11/Nov/2026 03:11:10] "GET /styles.css HTTP/1.1" 304 -
+::1 - - [11/Nov/2026 03:11:10] "GET /main.js HTTP/1.1" 304 -
+::1 - - [11/Nov/2026 03:11:10] "GET /assets/brand-libre.svg HTTP/1.1" 304 -
+::1 - - [11/Nov/2026 03:11:10] "GET /assets/brand-dexcom.svg HTTP/1.1" 304 -
+::1 - - [11/Nov/2026 03:27:13] "GET /index.html HTTP/1.1" 200 -
+::1 - - [11/Nov/2026 03:27:13] "GET /styles.css HTTP/1.1" 200 -
+::1 - - [11/Nov/2026 03:27:13] "GET /main.js HTTP/1.1" 200 -
+::1 - - [11/Nov/2026 03:27:13] "GET /assets/icon48.png HTTP/1.1" 304 -
+::1 - - [11/Nov/2026 03:27:13] "GET /assets/icon32.png HTTP/1.1" 304 -
+::1 - - [11/Nov/2026 03:27:13] "GET /assets/icon128.png HTTP/1.1" 304 -
+::1 - - [11/Nov/2026 03:27:13] "GET /assets/brand-libre.svg HTTP/1.1" 304 -
+::1 - - [11/Nov/2026 03:27:13] "GET /assets/brand-dexcom.svg HTTP/1.1" 304 -
+::1 - - [11/Nov/2026 03:27:44] "GET /assets/hero-sensor.svg HTTP/1.1" 304 -
+::1 - - [11/Nov/2026 03:27:44] "GET /assets/feature-alert.svg HTTP/1.1" 304 -

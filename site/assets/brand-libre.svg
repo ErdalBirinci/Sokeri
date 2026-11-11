@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 56" role="img" aria-label="FreeStyle Libre">
+  <rect x="1" y="1" width="218" height="54" rx="12" fill="#0b3d5c"/>
+  <path d="M28 12c5.5 7.2 8.5 12.4 8.5 17.4a8.5 8.5 0 1 1-17 0C19.5 24.4 22.5 19.2 28 12z" fill="#ffd34d"/>
+  <circle cx="28" cy="29.5" r="3.4" fill="#0b3d5c"/>
+  <text x="46" y="27" font-family="Verdana, Geneva, sans-serif" font-size="15" font-weight="bold" fill="#ffffff">FreeStyle Libre</text>
+  <text x="46" y="42" font-family="Verdana, Geneva, sans-serif" font-size="9.5" fill="#bcd6e4">Abbott · CGM sensors</text>
+</svg>

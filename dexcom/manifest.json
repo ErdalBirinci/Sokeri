@@ -1,0 +1,31 @@
+{
+  "manifest_version": 3,
+  "name": "Sokeri for Dexcom",
+  "version": "1.1.0",
+  "description": "Sokeri for Dexcom: sign in with your Dexcom account and follow your Dexcom G6/G7 glucose readings in the browser: live value, trend arrow, chart and threshold alerts.",
+  "minimum_chrome_version": "116",
+  "permissions": ["storage", "alarms", "notifications", "offscreen"],
+  "host_permissions": [
+    "https://share2.dexcom.com/*",
+    "https://shareous1.dexcom.com/*",
+    "https://share.dexcom.jp/*"
+  ],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_title": "Sokeri for Dexcom",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}

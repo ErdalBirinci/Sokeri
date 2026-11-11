@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sokeri for Dexcom</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <!-- ------------------------------------------------------- sign in -->
+    <section id="view-login" hidden>
+      <div class="masthead">
+        <img src="../icons/icon48.png" alt="" width="32" height="32" />
+        <h1>Sokeri for Dexcom</h1>
+      </div>
+
+      <p class="lede">
+        Track your glucose readings in the browser with your Dexcom account.
+      </p>
+
+      <form id="login-form" novalidate>
+        <div class="field">
+          <label for="email">Dexcom email</label>
+          <input id="email" name="email" type="email" autocomplete="username" required />
+        </div>
+
+        <div class="field">
+          <label for="password">Password</label>
+          <input
+            id="password"
+            name="password"
+            type="password"
+            autocomplete="current-password"
+            required
+          />
+        </div>
+
+        <div class="field">
+          <label for="region">Account region</label>
+          <select id="region" name="region">
+            <option value="ous" selected>Outside US (incl. Europe)</option>
+            <option value="us">United States</option>
+            <option value="jp">Japan</option>
+          </select>
+        </div>
+
+        <label class="check">
+          <input type="checkbox" id="remember" checked />
+          <span>Remember me on this device</span>
+        </label>
+
+        <p id="login-error" class="error" role="alert" hidden></p>          <button class="primary" type="submit" id="login-btn">Sign in</button>
+          <button class="linkish" type="button" id="btn-add-cancel" hidden>Cancel</button>
+      </form>
+
+      <p class="fine">
+        Use the same email and password as the Dexcom app on your phone. They
+        are stored only in this browser's extension storage and sent directly
+        to Dexcom's servers. They are not sent to any other server.
+      </p>
+    </section>
+
+    <!-- ----------------------------------------------------- dashboard -->
+    <section id="view-app" hidden>
+      <header class="topbar">
+        <div class="who">
+          <strong id="patient-name">Your readings</strong>
+          <span id="source-label" class="source"></span>
+        </div>
+        <div class="actions">
+          <button type="button" id="btn-refresh" aria-live="polite">Refresh</button>
+          <button type="button" id="btn-theme">Theme</button>
+          <button type="button" id="btn-settings" aria-expanded="false" aria-controls="settings">
+            Settings
+          </button>
+          <button type="button" id="btn-reports" aria-expanded="false" aria-controls="reports">
+            Reports
+          </button>
+        </div>
+      </header>
+
+      <p id="banner" class="banner" role="status" hidden></p>
+
+      <section class="hero" aria-labelledby="range-state">
+        <p id="range-state" class="state">—</p>
+        <p class="value">
+          <span class="num" id="value">—</span>
+          <span class="unit" id="unit">mg/dL</span>
+        </p>
+        <p class="meta">
+          <span id="trend"></span>
+          <span id="when"></span>
+        </p>
+      </section>
+
+      <div class="ranges" role="group" aria-label="Time range">
+        <button type="button" data-range="3" aria-pressed="true">3h</button>
+        <button type="button" data-range="6" aria-pressed="false">6h</button>
+        <button type="button" data-range="12" aria-pressed="false">12h</button>
+        <button type="button" data-range="24" aria-pressed="false">24h</button>
+        <button type="button" data-range="168" aria-pressed="false">7d</button>
+      </div>
+
+      <figure class="chart-figure">
+        <figcaption class="chart-caption">
+          <span id="chart-note">—</span>
+          <span id="chart-readout"></span>
+        </figcaption>
+        <div id="chart" class="chart" role="img" aria-label="Glucose chart"></div>
+      </figure>
+
+      <dl class="stats" id="stats">
+        <div><dt>In range</dt><dd id="stat-tir">—</dd></div>
+        <div><dt>Average</dt><dd id="stat-avg">—</dd></div>
+        <div><dt>GMI</dt><dd id="stat-gmi">—</dd></div>
+        <div><dt>Lowest</dt><dd id="stat-min">—</dd></div>
+        <div><dt>Highest</dt><dd id="stat-max">—</dd></div>
+        <div><dt>Variability</dt><dd id="stat-cv">—</dd></div>
+      </dl>
+
+      <section id="settings" class="settings" hidden>
+        <div class="row" id="account-row" hidden>
+          <label for="set-account">Account</label>
+          <span class="event-add">
+            <select id="set-account"></select>
+            <button type="button" id="btn-account-add" class="ghost">Add</button>
+          </span>
+        </div>
+
+        <div class="row-duo">
+          <div class="duo">
+            <span id="lbl-unit">Unit</span>
+            <div class="seg" role="group" aria-labelledby="lbl-unit">
+              <button type="button" data-unit="mgdl" aria-pressed="true">mg/dL</button>
+              <button type="button" data-unit="mmoll" aria-pressed="false">mmol/L</button>
+            </div>
+          </div>
+          <div class="duo">
+            <label for="set-interval" title="Refresh interval">Refresh</label>
+            <select id="set-interval">
+              <option value="1">1 minute</option>
+              <option value="2">2 minutes</option>
+              <option value="5">5 minutes</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row-duo">
+          <div class="duo">
+            <label for="set-low" title="Low threshold">Low</label>
+            <input id="set-low" type="number" inputmode="decimal" min="40" max="120" />
+          </div>
+          <div class="duo">
+            <label for="set-high" title="High threshold">High</label>
+            <input id="set-high" type="number" inputmode="decimal" min="120" max="400" />
+          </div>
+        </div>
+
+        <div class="row-duo">
+          <div class="duo">
+            <label for="set-night-low" title="Night low threshold">Night low</label>
+            <input id="set-night-low" type="number" inputmode="decimal" min="40" max="120" />
+          </div>
+          <div class="duo">
+            <label for="set-night-high" title="Night high threshold">Night high</label>
+            <input id="set-night-high" type="number" inputmode="decimal" min="120" max="400" />
+          </div>
+        </div>
+
+        <div class="row-duo">
+          <div class="duo">
+            <label for="set-night-start" title="Night hours start">Night</label>
+            <span class="night-hours">
+              <input id="set-night-start" type="number" inputmode="numeric" min="0" max="23" />
+              <span aria-hidden="true">–</span>
+              <input id="set-night-end" type="number" inputmode="numeric" min="0" max="23" />
+            </span>
+          </div>
+          <div class="duo">
+            <label for="set-predict" title="Trend prediction">Predict</label>
+            <select id="set-predict">
+              <option value="0">Off</option>
+              <option value="15">+15 min</option>
+              <option value="30">+30 min</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row-trio">
+          <label class="check-inline" title="High / low alerts"><input id="set-alerts" type="checkbox" /><span>Alerts</span></label>
+          <label class="check-inline" title="Alert sound"><input id="set-sound" type="checkbox" /><span>Sound</span></label>
+          <label class="check-inline" title="Remember session"><input id="set-remember" type="checkbox" /><span>Remember</span></label>
+        </div>
+
+        <div class="row-duo">
+          <div class="duo">
+            <label for="set-repeat" title="Repeat threshold alerts while still out of range">Repeat</label>
+            <select id="set-repeat">
+              <option value="0">Once</option>
+              <option value="5">5 min</option>
+              <option value="10">10 min</option>
+              <option value="15">15 min</option>
+              <option value="30">30 min</option>
+            </select>
+          </div>
+          <div class="duo">
+            <label class="check-inline" title="Alert when readings stop arriving"><input id="set-signal" type="checkbox" /><span>Signal loss</span></label>
+          </div>
+        </div>
+        <p class="set-note">Prediction is experimental, not medical advice. At night a low repeats every 5 minutes.</p>
+
+        <div class="row">
+          <label for="set-event-kind">Log event at now</label>
+          <span class="event-add">
+            <select id="set-event-kind">
+              <option value="meal">Meal</option>
+              <option value="insulin">Insulin</option>
+              <option value="exercise">Exercise</option>
+              <option value="other">Other</option>
+            </select>
+            <button type="button" id="btn-event-add" class="ghost">Add</button>
+          </span>
+        </div>
+        <ul id="event-list" class="event-list"></ul>
+
+        <div class="row row-actions">
+          <button type="button" id="btn-test" class="ghost">Test notification</button>
+          <button type="button" id="btn-logout-2" class="ghost">Sign out</button>
+        </div>
+
+        <div class="row row-actions">
+          <button type="button" id="btn-erase" class="ghost danger">Delete all local data</button>
+        </div>
+        <p class="set-note">Everything is stored only in this browser — deleting removes it from this device. Nothing is kept anywhere else.</p>
+
+        <details class="help">
+          <summary>No data?</summary>
+          <ul id="err-list" class="err-list"></ul>
+          <ol>
+            <li>
+              Sign in with the <strong>same Dexcom account</strong> you use in
+              the Dexcom app on your phone — no invitation or follower setup is
+              needed.
+            </li>
+            <li>
+              Open the <strong>Dexcom app</strong> and make sure it is uploading
+              (same account, internet connection, sensor active).
+            </li>
+            <li>Press <strong>Refresh</strong> in this extension.</li>
+            <li>
+              If sign-in fails, check the <strong>account region</strong>:
+              accounts registered in the US, outside the US and in Japan use
+              different servers.
+            </li>
+          </ol>
+        </details>
+      </section>
+
+      <section id="reports" class="reports" hidden>
+        <p class="rep-title">Last 7 days</p>
+        <div class="tirbar" role="img" aria-label="Time in range bar for the last 7 days">
+          <span class="tir-below"></span><span class="tir-inside"></span><span class="tir-above"></span>
+        </div>
+        <p class="rep-legend" id="rep-tir-legend">—</p>
+        <p class="rep-title">Daily pattern</p>
+        <div id="pattern" class="pattern" role="img" aria-label="Weekly pattern"></div>
+        <p class="rep-legend" id="rep-note"></p>
+        <div class="row row-actions">
+          <button type="button" id="btn-export" class="ghost">Export CSV</button>
+          <button type="button" id="btn-pdf" class="ghost">PDF report</button>
+          <button type="button" id="btn-clinic" class="ghost">Clinic mode</button>
+        </div>
+        <p class="set-note">Reports are generated locally in this browser — nothing is uploaded.</p>
+      </section>
+
+      <div id="logout-confirm" class="logout-confirm" hidden>
+        <p>Sign out? The session on this device will be deleted.</p>
+        <div class="logout-confirm-actions">
+          <button type="button" id="btn-logout-yes" class="ghost danger">Sign out</button>
+          <button type="button" id="btn-logout-no" class="ghost">Cancel</button>
+        </div>
+      </div>
+
+      <footer class="foot">
+        <button type="button" id="btn-help" class="linkish">No data?</button>
+        <button type="button" id="btn-logout" class="linkish">Sign out</button>
+      </footer>
+    </section>
+
+    <script type="module" src="popup.js"></script>
+  </body>
+</html>

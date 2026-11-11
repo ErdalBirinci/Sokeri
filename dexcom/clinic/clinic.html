@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sokeri for Dexcom — clinic mode</title>
+    <style>
+      :root {
+        --bg: #101418;
+        --line: #262d34;
+        --text: #f2f5f7;
+        --muted: #9aa4ae;
+        color-scheme: dark;
+      }
+      body[data-theme="light"] {
+        --bg: #fbf8f3;
+        --line: #e2ddd2;
+        --text: #1f2622;
+        --muted: #5a6560;
+        color-scheme: light;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font: 400 1rem/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 3rem 1.5rem 2rem;
+      }
+      .wrap { width: min(880px, 100%); }
+      header {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 1rem;
+        border-bottom: 1px solid var(--line);
+        padding-bottom: 1rem;
+      }
+      h1 { font-size: 1.25rem; margin: 0; }
+      .source { color: var(--muted); font-size: 0.875rem; }
+      .hero { text-align: center; padding: 2rem 0 1rem; }
+      .state { font-size: 1.25rem; font-weight: 650; margin: 0; }
+      .state[data-state="ok"] { color: #3ddc97; }
+      .state[data-state="low"] { color: #ff5c5c; }
+      .state[data-state="high"] { color: #ffb020; }
+      .state[data-state="none"] { color: var(--muted); }
+      .value { margin: 0.25rem 0 0; }
+      .num {
+        font-size: clamp(5rem, 18vw, 9rem);
+        font-weight: 700;
+        letter-spacing: -0.03em;
+        font-variant-numeric: tabular-nums;
+        line-height: 1;
+      }
+      .unit { font-size: 1.5rem; color: var(--muted); margin-left: 0.5rem; }
+      .meta { color: var(--muted); font-size: 1.125rem; margin: 0.5rem 0 0; }
+      figure { margin: 1rem 0 0; }
+      figcaption { color: var(--muted); font-size: 0.875rem; margin-bottom: 0.25rem; }
+      #chart svg { display: block; width: 100%; height: auto; }
+      .tir { text-align: center; color: var(--muted); font-size: 1.125rem; margin: 1rem 0 0; }
+      .tir strong { color: var(--text); font-variant-numeric: tabular-nums; }
+      footer { margin-top: 2rem; color: var(--muted); font-size: 0.875rem; text-align: center; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <h1>Sokeri for Dexcom — clinic mode</h1>
+        <span class="source" id="source">…</span>
+      </header>
+      <section class="hero" aria-live="polite">
+        <p class="state" id="state" data-state="none">—</p>
+        <p class="value"><span class="num" id="value">—</span><span class="unit" id="unit">mg/dL</span></p>
+        <p class="meta"><span id="trend"></span> <span id="when"></span></p>
+      </section>
+      <figure>
+        <figcaption id="chart-note">Last 24 hours</figcaption>
+        <div id="chart" role="img" aria-label="Glucose chart"></div>
+      </figure>
+      <p class="tir" id="tir">—</p>
+      <footer>
+        Read-only display. Not a medical device — confirm decisions on your sensor's own screen.
+        Refreshes every minute while this tab is open.
+      </footer>
+    </div>
+    <script type="module" src="clinic.js"></script>
+  </body>
+</html>
