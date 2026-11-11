@@ -332,7 +332,7 @@
                       <span class="pv-unit">mg/dL</span>
                     </p>
                     <p class="pv-meta">
-                      <span>→ Steady</span><span>2 minutes ago</span>
+                      <span>→ Steady</span><span id="pv-delta" title="Change since the first reading in this range">+0</span><span>2 minutes ago</span>
                     </p>
                   </div>
 
@@ -357,6 +357,8 @@
                     <div><dt>Average</dt><dd>118</dd></div>
                     <div><dt>Lowest</dt><dd>96</dd></div>
                     <div><dt>Highest</dt><dd>154</dd></div>
+                    <div><dt>Below</dt><dd id="pv-below">1%</dd></div>
+                    <div><dt>Above</dt><dd id="pv-above">5%</dd></div>
                   </dl>
 
                   <div class="pv-foot">
@@ -427,13 +429,44 @@
               </p>
             </li>
             <li>
-              <h3>Four statistics</h3>
+              <h3>Six statistics, plus the delta</h3>
               <p>
-                Time in range (TIR), average, lowest and highest values,
-                calculated for the selected time span.
+                Time in range (TIR), average, lowest, highest, below-range and
+                above-range shares, calculated for the selected time span — and
+                the delta next to the trend arrow, the change since the first
+                reading in the range (as in “142 +5”).
               </p>
             </li>
           </ol>
+        </div>
+      </section>
+
+      <!-- ============================================ simulated day -->
+      <section class="section" id="simulator">
+        <div class="section-head">
+          <h2>A day in thirty seconds</h2>
+          <p>
+            A simulated day, one hour per second — the readings are made up.
+            Watch the value, the trend arrow and the delta follow the playhead
+            while the chart draws itself, with the day's lowest and highest
+            points marked.
+          </p>
+        </div>
+
+        <div class="sim" id="sim">
+          <div class="sim-readout" aria-live="off">
+            <span class="sim-value" id="sim-value">—</span>
+            <span class="sim-unit">mg/dL</span>
+            <span class="sim-trend" id="sim-trend">→</span>
+            <span class="sim-delta" id="sim-delta">+0</span>
+            <span class="sim-clock" id="sim-clock">00:00</span>
+          </div>
+          <div class="sim-chart" id="sim-chart" role="img"
+               aria-label="Animated simulated glucose chart for a full day"></div>
+          <p class="sim-cap">
+            Simulated data for illustration — not measurements. Dots mark the
+            lowest and highest reading of the visible part of the day.
+          </p>
         </div>
       </section>
 

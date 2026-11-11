@@ -993,7 +993,8 @@ code {
 
 .pv-stats {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem 0;
   margin-top: 0.75rem;
   padding-top: 0.6rem;
   border-top: 1px solid #262d34;
@@ -1006,6 +1007,11 @@ code {
 }
 
 .pv-stats > div:first-child {
+  border-left: 0;
+  padding-left: 0;
+}
+
+.pv-stats > div:nth-child(4) {
   border-left: 0;
   padding-left: 0;
 }
@@ -1940,10 +1946,72 @@ code {
     gap: 0.5rem 0;
   }
 
-  .pv-stats > div:nth-child(3) {
+  .pv-stats > div:nth-child(3),
+  .pv-stats > div:nth-child(5) {
     border-left: 0;
     padding-left: 0;
   }
+}
+
+/* ================================================= simulated day */
+
+.sim {
+  background: #101418;
+  border: 1px solid #262d34;
+  border-radius: 14px;
+  padding: 1.25rem 1.25rem 1rem;
+  max-width: 56rem;
+}
+
+.sim-readout {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.sim-value {
+  font-size: 2.6rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #f2f5f7;
+  min-width: 4.2rem;
+}
+
+.sim-unit {
+  color: #9aa4ae;
+  font-size: 1rem;
+}
+
+.sim-trend {
+  color: #7fc8ff;
+  font-size: 1.05rem;
+  font-weight: 650;
+}
+
+.sim-delta {
+  color: #f2f5f7;
+  font-size: 1.05rem;
+  font-weight: 650;
+}
+
+.sim-clock {
+  margin-left: auto;
+  color: #9aa4ae;
+  font-size: 1.05rem;
+}
+
+.sim-chart svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-top: 0.5rem;
+}
+
+.sim-cap {
+  color: #9aa4ae;
+  font-size: 0.85rem;
+  margin-top: 0.6rem;
 }
 
 /* ================================================= user motion preference */
