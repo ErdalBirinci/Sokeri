@@ -232,6 +232,28 @@ code {
   border-bottom-color: var(--accent);
 }
 
+.nav a.nav-donate {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.32rem;
+  padding: 0.38rem 0.9rem;
+  border: 0;
+  border-radius: var(--r-pill);
+  background: linear-gradient(135deg, #e8912d, #c96a1e);
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 700;
+  box-shadow: 0 3px 12px rgba(201, 106, 30, 0.45);
+  transition: transform 150ms ease, box-shadow 150ms ease;
+}
+
+.nav a.nav-donate:hover {
+  color: #fff;
+  border-bottom-color: transparent;
+  transform: translateY(-1px);
+  box-shadow: 0 5px 16px rgba(201, 106, 30, 0.6);
+}
+
 .topbar .btn-small {
   flex: 0 0 auto;
 }
