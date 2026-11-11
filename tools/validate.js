@@ -168,9 +168,12 @@ for (const file of codeFiles) {
 }
 if (!urlErrors) ok("no external URLs outside the CGM servers");
 
-// --- the extension copy is English only ---
+// --- the extension copy is English + Finnish only ---
+// The UI ships in English and Finnish. Finnish shares ö/ü/ä/å with other
+// languages, so only letters Finnish never uses (ğ, ş, ı, İ, ç and capitals)
+// count as leftover Turkish copy.
 console.log("[shared] no Turkish copy left");
-const TURKISH = /[\u011F\u00FC\u015F\u00F6\u00E7\u0131\u0130\u011E\u015E\u00D6\u00C7]/;
+const TURKISH = /[\u011F\u015F\u0131\u0130\u00E7\u011E\u015E\u00C7]/;
 const copyFiles = [];
 for (const ed of EDITIONS) {
   copyFiles.push(

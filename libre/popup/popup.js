@@ -11,12 +11,371 @@ const NS = "http://www.w3.org/2000/svg";
 const MMOL = 18.018;
 
 const TREND = {
-  1: ["↓", "falling fast"],
-  2: ["↘", "falling"],
-  3: ["→", "steady"],
-  4: ["↗", "rising"],
-  5: ["↑", "rising fast"],
+  1: ["↓", "trendFallFast"],
+  2: ["↘", "trendFalling"],
+  3: ["→", "trendSteady"],
+  4: ["↗", "trendRising"],
+  5: ["↑", "trendRiseFast"],
 };
+
+/* English + Finnish UI strings. Finnish shares some dotted letters with
+   Turkish, so the Turkish-copy check in tools/validate.js only looks for
+   the letters Finnish never uses (see the character class there). */
+const STRINGS = {
+  en: {
+    loginLede: "Track your glucose readings in the browser with your LibreView account.",
+    loginLedeDex: "Track your glucose readings in the browser with your Dexcom account.",
+    dexEmail: "Dexcom email",
+    dexRegion: "Account region",
+    rOus: "Outside US (incl. Europe)",
+    rUsD: "United States",
+    rJpD: "Japan",
+    loginFineDex:
+      "Use the same email and password as the Dexcom app on your phone. They are stored only in this browser's extension storage and sent directly to Dexcom's servers. They are not sent to any other server.",
+    email: "Email",
+    password: "Password",
+    region: "Region",
+    regionAuto: "Automatic (recommended)",
+    rEu: "Europe (eu)",
+    rEu2: "Europe 2 (eu2)",
+    rUs: "United States (us)",
+    rCa: "Canada (ca)",
+    rUk: "United Kingdom (uk)",
+    rDe: "Germany (de)",
+    rFr: "France (fr)",
+    rAe: "United Arab Emirates (ae)",
+    rAu: "Australia (au)",
+    rAp: "Asia Pacific (ap)",
+    rJp: "Japan (jp)",
+    rememberMe: "Remember me on this device",
+    signIn: "Sign in",
+    signingIn: "Signing in…",
+    cancel: "Cancel",
+    loginFine:
+      "Your email and password are stored only in this browser's extension storage and sent directly to Abbott's servers. They are not sent to any other server.",
+    requiredErr: "Email and password are required.",
+    sendErr: "Could not send the request. Check your internet connection.",
+    refresh: "Refresh",
+    refreshing: "Refreshing…",
+    theme: "Theme",
+    settings: "Settings",
+    closeSettings: "Close settings",
+    reports: "Reports",
+    closeReports: "Close",
+    noReading: "No reading",
+    inRange: "In range",
+    stateLow: "Low",
+    stateHigh: "High",
+    lastReading: "Last reading {ago}",
+    trendSteady: "steady",
+    trendRising: "rising",
+    trendFalling: "falling",
+    trendRiseFast: "rising fast",
+    trendFallFast: "falling fast",
+    justNow: "just now",
+    minAgo: "{n} min ago",
+    hrAgo: "{n} hr ago",
+    hrMinAgo: "{n} hr {m} min ago",
+    chartTarget: "Target {lo}–{hi} {unit}",
+    chartEmpty: "No readings in this range.",
+    chartOne: "Only one reading.",
+    chartAria:
+      "Glucose chart for the last {h} hours. Lowest {min}, highest {max}, most recent {last} {unit}. Target range {lo} to {hi}.",
+    statInRange: "In range",
+    statAvg: "Average",
+    statGmi: "GMI",
+    statMin: "Lowest",
+    statMax: "Highest",
+    statCv: "Variability",
+    unit: "Unit",
+    refreshShort: "Refresh",
+    refreshTitle: "Refresh interval",
+    low: "Low",
+    lowTitle: "Low threshold",
+    high: "High",
+    highTitle: "High threshold",
+    nightLow: "Night low",
+    nightLowTitle: "Night low threshold",
+    nightHigh: "Night high",
+    nightHighTitle: "Night high threshold",
+    night: "Night",
+    nightTitle: "Night hours start",
+    predict: "Predict",
+    predictTitle: "Trend prediction",
+    alerts: "Alerts",
+    alertsTitle: "High / low alerts",
+    sound: "Sound",
+    soundTitle: "Alert sound",
+    remember: "Remember",
+    rememberTitle: "Remember session",
+    repeat: "Repeat",
+    repeatTitle: "Repeat threshold alerts while still out of range",
+    repeatOnce: "Once",
+    signal: "Signal loss",
+    signalTitle: "Alert when readings stop arriving",
+    predictNote: "Prediction is experimental, not medical advice. At night a low repeats every 5 minutes.",
+    logEvent: "Log event at now",
+    meal: "Meal",
+    insulin: "Insulin",
+    exercise: "Exercise",
+    other: "Other",
+    add: "Add",
+    deleteBtn: "Delete",
+    testNotif: "Test notification",
+    signOut: "Sign out",
+    deleteAll: "Delete all local data",
+    deleteAgain: "Click again to erase everything",
+    eraseNote:
+      "Everything is stored only in this browser — deleting removes it from this device. Nothing is kept anywhere else.",
+    exportCsv: "Export CSV",
+    noData: "No data",
+    saved: "Saved ✓",
+    noDataQ: "No data?",
+    noDataN: "No data? ({n})",
+    reportsNote: "Reports are generated locally in this browser — nothing is uploaded.",
+    last7: "Last 7 days",
+    pattern: "Daily pattern",
+    noData7: "No readings in the last 7 days.",
+    storedNote: "{n} readings stored on this device (up to 15 days).",
+    nothingStored: "Nothing stored yet — press Refresh.",
+    tirLegend: "{in}% in range · {below}% low · {above}% high · {n} readings, last 7 days",
+    logoutQ: "Sign out? The session on this device will be deleted.",
+    staleNote: "No new data. Last reading {ago}.",
+    staleHint: "No new readings for {ago}. Check the sensor and the phone app.",
+    followedPerson: "Followed person",
+    account: "Account",
+    accountAdd: "Add",
+    evItem: "{kind} · {time} ({ago})",
+    pdfReport: "PDF report",
+    clinicMode: "Clinic mode",
+    ob1t: "Your reading lives on the badge",
+    ob1x: "The toolbar icon always shows the latest value in your threshold colours. Click it for this panel.",
+    ob2t: "Set your thresholds",
+    ob2x: "Low and high drive the alerts and the badge colour. Nights can have their own values.",
+    ob3t: "Reports when you need them",
+    ob3x: "The Reports view has the weekly pattern, a PDF for doctor visits and a full-tab clinic mode.",
+    next: "Next",
+    skip: "Skip",
+    done: "Done",
+    stepOf: "{i} / 3",
+    importCsv: "Import CSV",
+    importDone: "Imported ✓",
+    importFail: "No readings found",
+    helpL1:
+      "Open the <strong>LibreLinkUp</strong> app on your phone and invite your own email address with <strong>Add participant</strong>.",
+    helpL2:
+      "Accept the invitation in the <strong>LibreLink</strong> app; you only need to do this once.",
+    helpL3: "Press <strong>Refresh</strong> in this extension.",
+    helpL4:
+      "If a two-factor prompt or a robot check appears, sign in once at libreview.com in the browser, then try again.",
+    helpD1:
+      "Sign in with the <strong>same Dexcom account</strong> you use in the Dexcom app on your phone — no invitation or follower setup is needed.",
+    helpD2:
+      "Open the <strong>Dexcom app</strong> and make sure it is uploading (same account, internet connection, sensor active).",
+    helpD3:
+      "If sign-in fails, check the <strong>account region</strong>: accounts registered in the US, outside the US and in Japan use different servers.",
+    int1: "1 minute",
+    int2: "2 minutes",
+    int5: "5 minutes",
+    predictOff: "Off",
+    rep5: "5 min",
+    rep10: "10 min",
+    rep15: "15 min",
+    rep30: "30 min",
+  },
+  fi: {
+    loginLede: "Seuraa glukoosiarvojasi selaimessa LibreView-tililläsi.",
+    loginLedeDex: "Seuraa glukoosiarvojasi selaimessa Dexcom-tililläsi.",
+    dexEmail: "Dexcom-sähköposti",
+    dexRegion: "Tilin alue",
+    rOus: "Yhdysvaltain ulkopuolella (ml. Eurooppa)",
+    rUsD: "Yhdysvallat",
+    rJpD: "Japani",
+    loginFineDex:
+      "Käytä samaa sähköpostia ja salasanaa kuin puhelimesi Dexcom-sovelluksessa. Ne tallennetaan vain tämän selaimen laajennustallennustilaan ja lähetetään suoraan Dexcomin palvelimille. Niitä ei lähetetä muualle.",
+    email: "Sähköposti",
+    password: "Salasana",
+    region: "Alue",
+    regionAuto: "Automaattinen (suositus)",
+    rEu: "Eurooppa (eu)",
+    rEu2: "Eurooppa 2 (eu2)",
+    rUs: "Yhdysvallat (us)",
+    rCa: "Kanada (ca)",
+    rUk: "Yhdistynyt kuningaskunta (uk)",
+    rDe: "Saksa (de)",
+    rFr: "Ranska (fr)",
+    rAe: "Arabiemiirikunnat (ae)",
+    rAu: "Australia (au)",
+    rAp: "Aasia–Tyynimeri (ap)",
+    rJp: "Japani (jp)",
+    rememberMe: "Muista minut tällä laitteella",
+    signIn: "Kirjaudu",
+    signingIn: "Kirjaudutaan…",
+    cancel: "Peruuta",
+    loginFine:
+      "Sähköposti ja salasana tallennetaan vain tämän selaimen laajennustallennustilaan ja lähetetään suoraan Abbottin palvelimille. Niitä ei lähetetä muualle.",
+    requiredErr: "Sähköposti ja salasana vaaditaan.",
+    sendErr: "Pyyntöä ei voitu lähettää. Tarkista internetyhteys.",
+    refresh: "Päivitä",
+    refreshing: "Päivitetään…",
+    theme: "Teema",
+    settings: "Asetukset",
+    closeSettings: "Sulje asetukset",
+    reports: "Raportit",
+    closeReports: "Sulje",
+    noReading: "Ei lukemaa",
+    inRange: "Alueella",
+    stateLow: "Matala",
+    stateHigh: "Korkea",
+    lastReading: "Viimeisin lukema {ago}",
+    trendSteady: "vakaa",
+    trendRising: "nousee",
+    trendFalling: "laskee",
+    trendRiseFast: "nousee nopeasti",
+    trendFallFast: "laskee nopeasti",
+    justNow: "juuri nyt",
+    minAgo: "{n} min sitten",
+    hrAgo: "{n} t sitten",
+    hrMinAgo: "{n} t {m} min sitten",
+    chartTarget: "Tavoite {lo}–{hi} {unit}",
+    chartEmpty: "Ei lukemia valitulla välillä.",
+    chartOne: "Vain yksi lukema.",
+    chartAria:
+      "Glukoosikäyrä viimeiseltä {h} tunnilta. Alin {min}, korkein {max}, uusin {last} {unit}. Tavoitealue {lo}–{hi}.",
+    statInRange: "Alueella",
+    statAvg: "Keskiarvo",
+    statGmi: "GMI",
+    statMin: "Alin",
+    statMax: "Korkein",
+    statCv: "Vaihtelu",
+    unit: "Yksikkö",
+    refreshShort: "Päivitys",
+    refreshTitle: "Päivitysväli",
+    low: "Matala",
+    lowTitle: "Matalan raja",
+    high: "Korkea",
+    highTitle: "Korkean raja",
+    nightLow: "Yö matala",
+    nightLowTitle: "Yön matalan raja",
+    nightHigh: "Yö korkea",
+    nightHighTitle: "Yön korkean raja",
+    night: "Yö",
+    nightTitle: "Yöajan alku",
+    predict: "Ennuste",
+    predictTitle: "Trendin ennuste",
+    alerts: "Hälytykset",
+    alertsTitle: "Matalan/korkean hälytykset",
+    sound: "Ääni",
+    soundTitle: "Hälytysääni",
+    remember: "Muista",
+    rememberTitle: "Muista istunto",
+    repeat: "Toista",
+    repeatTitle: "Toista rajahälytyksiä alueen ulkopuolella",
+    repeatOnce: "Kerran",
+    signal: "Signaalikatkos",
+    signalTitle: "Hälytä kun lukemia ei saavu",
+    predictNote: "Ennuste on kokeellinen, ei lääketieteellistä neuvontaa. Yöllä matala toistuu 5 minuutin välein.",
+    logEvent: "Kirjaa tapahtuma nyt",
+    meal: "Ateria",
+    insulin: "Insuliini",
+    exercise: "Liikunta",
+    other: "Muu",
+    add: "Lisää",
+    deleteBtn: "Poista",
+    testNotif: "Testaa ilmoitus",
+    signOut: "Kirjaudu ulos",
+    deleteAll: "Poista kaikki paikalliset tiedot",
+    deleteAgain: "Poista kaikki napsauttamalla uudelleen",
+    eraseNote:
+      "Kaikki tallennetaan vain tähän selaimeen — poistaminen poistaa tiedot tältä laitteelta. Muualla ei säilytetä mitään.",
+    exportCsv: "Vie CSV",
+    noData: "Ei dataa",
+    saved: "Tallennettu ✓",
+    noDataQ: "Ei dataa?",
+    noDataN: "Ei dataa? ({n})",
+    reportsNote: "Raportit luodaan paikallisesti tässä selaimessa — mitään ei ladata minnekään.",
+    last7: "Viimeiset 7 päivää",
+    pattern: "Päivärytmi",
+    noData7: "Ei lukemia viimeisen 7 päivän aikana.",
+    storedNote: "{n} lukemaa tallennettu tälle laitteelle (enintään 15 päivää).",
+    nothingStored: "Ei tallennettu vielä — paina Päivitä.",
+    tirLegend: "{in}% alueella · {below}% matala · {above}% korkea · {n} lukemaa, viimeiset 7 päivää",
+    logoutQ: "Kirjaudutko ulos? Tämän laitteen istunto poistetaan.",
+    staleNote: "Ei uutta dataa. Viimeisin lukema {ago}.",
+    staleHint: "Ei uusia lukemia {ago} aikana. Tarkista sensori ja puhelinsovellus.",
+    followedPerson: "Seurattava henkilö",
+    account: "Tili",
+    accountAdd: "Lisää",
+    evItem: "{kind} · {time} ({ago})",
+    pdfReport: "PDF-raportti",
+    clinicMode: "Klinikkatila",
+    ob1t: "Lukema elää kuvakkeessa",
+    ob1x: "Työkalurivin kuvake näyttää aina uusimman arvon rajojesi väreissä. Napsauta sitä avataksesi tämän paneelin.",
+    ob2t: "Aseta rajasi",
+    ob2x: "Matala ja korkea ohjaavat hälytyksiä ja kuvakkeen väriä. Yölle voi asettaa omat arvot.",
+    ob3t: "Raportit tarvittaessa",
+    ob3x: "Raporttinäkymässä on viikkorytmi, PDF lääkärille ja koko välilehden klinikkatila.",
+    next: "Seuraava",
+    skip: "Ohita",
+    done: "Valmis",
+    stepOf: "{i} / 3",
+    importCsv: "Tuo CSV",
+    importDone: "Tuotu ✓",
+    importFail: "Lukemia ei löytynyt",
+    helpL1:
+      "Avaa puhelimesi <strong>LibreLinkUp</strong>-sovellus ja kutsu oma sähköpostiosoitteesi <strong>Add participant</strong> -toiminnolla.",
+    helpL2:
+      "Hyväksy kutsu <strong>LibreLink</strong>-sovelluksessa; tämä tarvitsee tehdä vain kerran.",
+    helpL3: "Paina laajennuksessa <strong>Päivitä</strong>.",
+    helpL4:
+      "Jos kaksivaiheinen tunnistus tai robottitarkistus tulee vastaan, kirjaudu kerran selaimessa libreview.com-sivustolla ja yritä sitten uudelleen.",
+    helpD1:
+      "Kirjaudu <strong>samalla Dexcom-tilillä</strong> kuin puhelimesi Dexcom-sovelluksessa — kutsua tai seuraaja-asetusta ei tarvita.",
+    helpD2:
+      "Avaa <strong>Dexcom-sovellus</strong> ja varmista, että se lähettää dataa (sama tili, internetyhteys, sensori aktiivinen).",
+    helpD3:
+      "Jos kirjautuminen epäonnistuu, tarkista <strong>tilin alue</strong>: Yhdysvalloissa, sen ulkopuolella ja Japanissa rekisteröidyt tilit käyttävät eri palvelimia.",
+    int1: "1 minuutti",
+    int2: "2 minuuttia",
+    int5: "5 minuuttia",
+    predictOff: "Pois",
+    rep5: "5 min",
+    rep10: "10 min",
+    rep15: "15 min",
+    rep30: "30 min",
+  },
+};
+
+function t(key, vars) {
+  const lang = state.settings.lang === "fi" ? "fi" : "en";
+  let s = (STRINGS[lang] && STRINGS[lang][key]) ?? STRINGS.en[key] ?? key;
+  if (vars) {
+    for (const [k, v] of Object.entries(vars)) s = s.split(`{${k}}`).join(String(v));
+  }
+  return s;
+}
+
+function applyI18n() {
+  const lang = state.settings.lang === "fi" ? "fi" : "en";
+  document.documentElement.lang = lang;
+  document.querySelectorAll("[data-i18n]").forEach((el) => {
+    el.textContent = t(el.dataset.i18n);
+  });
+  document.querySelectorAll("[data-i18n-html]").forEach((el) => {
+    el.innerHTML = t(el.dataset.i18nHtml);
+  });
+  document.querySelectorAll("[data-i18n-aria]").forEach((el) => {
+    el.setAttribute("aria-label", t(el.dataset.i18nAria));
+  });
+  document.querySelectorAll("[data-i18n-title]").forEach((el) => {
+    el.setAttribute("title", t(el.dataset.i18nTitle));
+  });
+  document.querySelectorAll("[data-i18n-ph]").forEach((el) => {
+    el.setAttribute("placeholder", t(el.dataset.i18nPh));
+  });
+  const langBtn = document.getElementById("btn-lang");
+  if (langBtn) langBtn.textContent = lang === "fi" ? "EN" : "FI";
+}
 
 const DEFAULTS = {
   unit: "mgdl",
@@ -35,6 +394,7 @@ const DEFAULTS = {
   personId: null, // selected followed person (Libre); null = first connection
   repeatMin: 10, // re-alert while still out of range; 0 = once per episode
   signalLoss: true, // alert when no new reading arrives for a while
+  lang: "en", // "en" | "fi"
 };
 
 const EXPORT_NAME = "sokeri-libre-readings.csv";
@@ -91,7 +451,7 @@ function fromDisp(value, unit) {
 }
 
 function fmtTime(ts) {
-  return new Date(ts).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" });
+  return new Date(ts).toLocaleTimeString(locale(), { hour: "2-digit", minute: "2-digit" });
 }
 
 function fmtX(ts) {
@@ -102,11 +462,15 @@ function fmtX(ts) {
 
 function relTime(ts) {
   const minutes = Math.round((Date.now() - ts) / 60000);
-  if (minutes < 1) return "just now";
-  if (minutes < 60) return `${minutes} min ago`;
+  if (minutes < 1) return t("justNow");
+  if (minutes < 60) return t("minAgo", { n: minutes });
   const hours = Math.floor(minutes / 60);
   const rest = minutes % 60;
-  return rest ? `${hours} hr ${rest} min ago` : `${hours} hr ago`;
+  return rest ? t("hrMinAgo", { n: hours, m: rest }) : t("hrAgo", { n: hours });
+}
+
+function locale() {
+  return state.settings.lang === "fi" ? "fi-FI" : "en-US";
 }
 
 function rangeStateOf(mgdl, s, ts) {
@@ -278,6 +642,18 @@ function bindEvents() {
 
   $("btn-test").addEventListener("click", () => send({ type: "testAlert" }));
 
+  bindImport();
+
+  $("onboard-next").addEventListener("click", () => {
+    if (obStep < ONBOARD_STEPS.length - 1) {
+      obStep++;
+      paintOnboard();
+    } else {
+      closeOnboard();
+    }
+  });
+  $("onboard-skip").addEventListener("click", closeOnboard);
+
   document.querySelectorAll(".ranges button").forEach((btn) => {
     btn.addEventListener("click", () => {
       rangeHours = Number(btn.dataset.range);
@@ -295,6 +671,10 @@ function bindEvents() {
 
   $("btn-theme").addEventListener("click", () =>
     save({ theme: state.settings.theme === "light" ? "dark" : "light" })
+  );
+
+  $("btn-lang").addEventListener("click", () =>
+    save({ lang: state.settings.lang === "fi" ? "en" : "fi" })
   );
 
   const personSel = document.getElementById("set-person");
@@ -336,9 +716,9 @@ function bindEvents() {
     const btn = $("btn-export");
     const series = [...(state.data?.series || [])].sort((a, b) => a.ts - b.ts);
     if (!series.length) {
-      btn.textContent = "No data";
+      btn.textContent = t("noData");
       setTimeout(() => {
-        btn.textContent = "Export CSV";
+        btn.textContent = t("exportCsv");
       }, 2000);
       return;
     }
@@ -359,9 +739,9 @@ function bindEvents() {
       URL.revokeObjectURL(a.href);
       a.remove();
     }, 500);
-    btn.textContent = "Saved ✓";
+    btn.textContent = t("saved");
     setTimeout(() => {
-      btn.textContent = "Export CSV";
+      btn.textContent = t("exportCsv");
     }, 2000);
   });
   let eraseArmed = false;
@@ -370,21 +750,22 @@ function bindEvents() {
     const btn = $("btn-erase");
     if (!eraseArmed) {
       eraseArmed = true;
-      btn.textContent = "Click again to erase everything";
-      eraseTimer = setTimeout(() => {
+      btn.textContent = t("deleteAgain");
+      eraseTimer =      setTimeout(() => {
         eraseArmed = false;
-        btn.textContent = "Delete all local data";
+        btn.textContent = t("deleteAll");
       }, 4000);
       return;
     }
     clearTimeout(eraseTimer);
     eraseArmed = false;
-    btn.textContent = "Delete all local data";
+    btn.textContent = t("deleteAll");
     btn.disabled = true;
     try {
       stopAuto();
       await send({ type: "logout" });
-      await chrome.storage.local.remove(["settings", "glucoseData", "events"]);
+      await chrome.storage.local.remove(["settings", "glucoseData", "events", "onboarded"]);
+      onboardKnown = null;
       state = { authed: false, user: null, settings: { ...DEFAULTS }, data: null, events: [] };
       rangeHours = 3;
       syncSettingsForm();
@@ -469,7 +850,11 @@ function saveThreshold(key) {
   save({ [key]: mgdl });
 }
 
-const EVENT_LABEL = { meal: "Meal", insulin: "Insulin", exercise: "Exercise", other: "Other" };
+const EVENT_KEY = { meal: "meal", insulin: "insulin", exercise: "exercise", other: "other" };
+
+function eventLabel(kind) {
+  return t(EVENT_KEY[kind] || "other");
+}
 
 function getEvents() {
   return Array.isArray(state.events) ? state.events : [];
@@ -494,7 +879,7 @@ function renderEvents() {
   for (const ev of all.slice(-8).reverse()) {
     const li = document.createElement("li");
     const span = document.createElement("span");
-    span.textContent = `${EVENT_LABEL[ev.kind] || "Other"} · ${fmtTime(ev.ts)} (${relTime(ev.ts)})`;
+    span.textContent = t("evItem", { kind: eventLabel(ev.kind), time: fmtTime(ev.ts), ago: relTime(ev.ts) });
     const del = document.createElement("button");
     del.type = "button";
     del.className = "ghost danger mini";
@@ -525,6 +910,78 @@ function renderAccounts() {
     if (a.active) opt.selected = true;
     sel.appendChild(opt);
   }
+}
+
+/* ------------------------------------------------------------ onboarding */
+
+const ONBOARD_STEPS = ["ob1", "ob2", "ob3"];
+let obStep = 0;
+let onboardKnown = null; // cached {onboarded} flag for this popup lifetime
+
+async function maybeOnboard() {
+  if (onboardKnown == null) {
+    try {
+      const stored = await chrome.storage.local.get("onboarded");
+      onboardKnown = Boolean(stored.onboarded);
+    } catch {
+      onboardKnown = true;
+    }
+  }
+  const show = state.authed && !addingAccount && !onboardKnown;
+  $("onboard").hidden = !show;
+  if (show) {
+    obStep = 0;
+    paintOnboard();
+  }
+}
+
+function paintOnboard() {
+  const n = ONBOARD_STEPS[obStep];
+  $("onboard-step").textContent = t("stepOf", { i: obStep + 1 });
+  $("onboard-title").textContent = t(`${n}t`);
+  $("onboard-text").textContent = t(`${n}x`);
+  $("onboard-next").textContent = obStep === ONBOARD_STEPS.length - 1 ? t("done") : t("next");
+}
+
+async function closeOnboard() {
+  $("onboard").hidden = true;
+  onboardKnown = true;
+  try {
+    await chrome.storage.local.set({ onboarded: true });
+  } catch {
+    /* storage unavailable */
+  }
+}
+
+/* ---------------------------------------------------------- CSV import */
+
+function bindImport() {
+  const file = $("file-import");
+  if (!file) return;
+  $("btn-import").addEventListener("click", () => file.click());
+  file.addEventListener("change", async () => {
+    const btn = $("btn-import");
+    const picked = file.files && file.files[0];
+    file.value = "";
+    if (!picked) return;
+    let text = "";
+    try {
+      text = await picked.text();
+    } catch {
+      /* unreadable */
+    }
+    const r = await send({ type: "importCsv", text });
+    if (r?.ok) {
+      state = { ...state, ...(await send({ type: "state" })) };
+      render();
+      btn.textContent = t("importDone");
+    } else {
+      btn.textContent = t("importFail");
+    }
+    setTimeout(() => {
+      btn.textContent = t("importCsv");
+    }, 2500);
+  });
 }
 
 /* Followed-person selector (Libre only). Uses getElementById on purpose: the
@@ -558,13 +1015,13 @@ async function onLogin(event) {
 
   errorEl.hidden = true;
   if (!email || !password) {
-    errorEl.textContent = "Email and password are required.";
+    errorEl.textContent = t("requiredErr");
     errorEl.hidden = false;
     return;
   }
 
   button.disabled = true;
-  button.textContent = "Signing in…";
+  button.textContent = t("signingIn");
   try {
     const r = await send({
       type: "login",
@@ -585,11 +1042,11 @@ async function onLogin(event) {
     render();
     startAuto();
   } catch (err) {
-    errorEl.textContent = "Could not send the request. Check your internet connection.";
+    errorEl.textContent = t("sendErr");
     errorEl.hidden = false;
   } finally {
     button.disabled = false;
-    button.textContent = "Sign in";
+    button.textContent = t("signIn");
   }
 }
 
@@ -601,7 +1058,7 @@ async function doRefresh() {
   refreshing = true;
   const button = $("btn-refresh");
   button.disabled = true;
-  button.textContent = "Refreshing…";
+  button.textContent = t("refreshing");
   button.setAttribute("aria-busy", "true");
   try {
     const r = await send({ type: "refresh" });
@@ -612,7 +1069,7 @@ async function doRefresh() {
   } finally {
     refreshing = false;
     button.disabled = false;
-    button.textContent = "Refresh";
+    button.textContent = t("refresh");
     button.setAttribute("aria-busy", "false");
   }
 }
@@ -642,14 +1099,15 @@ function setView(name) {
   $("view-app").classList.toggle("settings-open", name === "settings");
   $("view-app").classList.toggle("reports-open", name === "reports");
   $("btn-settings").setAttribute("aria-expanded", String(name === "settings"));
-  $("btn-settings").textContent = name === "settings" ? "Close settings" : "Settings";
+  $("btn-settings").textContent = name === "settings" ? t("closeSettings") : t("settings");
   $("btn-reports").setAttribute("aria-expanded", String(name === "reports"));
-  $("btn-reports").textContent = name === "reports" ? "Close" : "Reports";
+  $("btn-reports").textContent = name === "reports" ? t("closeReports") : t("reports");
   if (name === "reports") renderReports();
   fitPopup();
 }
 
 function render() {
+  applyI18n();
   document.body.dataset.theme = state.settings.theme === "light" ? "light" : "dark";
   $("view-login").hidden = state.authed && !addingAccount;
   $("view-app").hidden = !state.authed || addingAccount;
@@ -667,6 +1125,7 @@ function render() {
   renderEvents();
   renderPerson();
   renderAccounts();
+  maybeOnboard();
   const cancel = document.getElementById("btn-add-cancel");
   if (cancel) cancel.hidden = !addingAccount;
   if (panelView === "reports" && !$("reports").hidden) renderReports();
@@ -706,8 +1165,8 @@ function renderBanner() {
         kind: "note",
         text:
           ageMs > 20 * 60 * 1000
-            ? `No new readings for ${relTime(d.latest.ts)}. Check the sensor and the phone app.`
-            : `No new data. Last reading ${relTime(d.latest.ts)}.`,
+            ? t("staleHint", { ago: relTime(d.latest.ts) })
+            : t("staleNote", { ago: relTime(d.latest.ts) }),
       });
     } else if (d?.notes?.length) {
       messages.push({ kind: "note", text: d.notes[0] });
@@ -730,7 +1189,7 @@ function renderBanner() {
     li.textContent = text;
     list.appendChild(li);
   }
-  $("btn-help").textContent = errors.length ? `No data? (${errors.length})` : "No data?";
+  $("btn-help").textContent = errors.length ? t("noDataN", { n: errors.length }) : t("noDataQ");
 }
 
 function renderHero() {
@@ -756,15 +1215,15 @@ function renderHero() {
   stateEl.dataset.state = kind;
   stateEl.textContent =
     kind === "none"
-      ? `Last reading ${relTime(latest.ts)}`
+      ? t("lastReading", { ago: relTime(latest.ts) })
       : kind === "low"
-        ? "Low"
+        ? t("stateLow")
         : kind === "high"
-          ? "High"
-          : "In range";
+          ? t("stateHigh")
+          : t("inRange");
 
   const trend = TREND[latest.trend];
-  $("trend").textContent = trend ? `${trend[0]} ${trend[1]}` : "";
+  $("trend").textContent = trend ? `${trend[0]} ${t(trend[1])}` : "";
   $("when").textContent = `${fmtTime(latest.ts)} (${relTime(latest.ts)})`;
 }
 
@@ -798,12 +1257,12 @@ function renderChart() {
   };
 
   host.textContent = "";
-  note.textContent = `Target ${fmt(lo, s.unit)}–${fmt(hi, s.unit)} ${unitLabel(s.unit)}`;
+  note.textContent = t("chartTarget", { lo: fmt(lo, s.unit), hi: fmt(hi, s.unit), unit: unitLabel(s.unit) });
 
   if (points.length < 2) {
     const empty = document.createElement("p");
     empty.className = "chart-empty";
-    empty.textContent = points.length ? "Only one reading." : "No readings in this range.";
+    empty.textContent = points.length ? t("chartOne") : t("chartEmpty");
     host.appendChild(empty);
     host.setAttribute("aria-label", "Glucose chart: no readings in this range");
     readout.textContent = "";
@@ -1040,13 +1499,15 @@ function renderChart() {
   const max = Math.max(...values);
   host.setAttribute(
     "aria-label",
-    `Glucose chart for the last ${rangeHours} hours. Lowest ${fmt(min, s.unit)}, highest ${fmt(
-      max,
-      s.unit
-    )}, most recent ${fmt(last.mgdl, s.unit)} ${unitLabel(s.unit)}. Target range ${fmt(
-      lo,
-      s.unit
-    )} to ${fmt(hi, s.unit)}.`
+    t("chartAria", {
+      h: rangeHours,
+      min: fmt(min, s.unit),
+      max: fmt(max, s.unit),
+      last: fmt(last.mgdl, s.unit),
+      unit: unitLabel(s.unit),
+      lo: fmt(lo, s.unit),
+      hi: fmt(hi, s.unit),
+    })
   );
 
   svg.addEventListener("pointermove", (event) => {
@@ -1136,6 +1597,10 @@ function renderReports() {
   const s = state.settings;
   const series = seriesOfLast(7);
   const split = tirSplit(series, s);
+  const pdfBtn = $("btn-pdf");
+  if (pdfBtn && !pdfBtn.dataset.busy) pdfBtn.textContent = t("pdfReport");
+  const clinicBtn = $("btn-clinic");
+  if (clinicBtn) clinicBtn.textContent = t("clinicMode");
 
   const below = document.querySelector(".tir-below");
   const inside = document.querySelector(".tir-inside");
@@ -1148,16 +1613,19 @@ function renderReports() {
   const legend = $("rep-tir-legend");
   if (legend) {
     legend.textContent = series.length
-      ? `${Math.round(split.in)}% in range · ${Math.round(split.below)}% low · ${Math.round(split.above)}% high · ${series.length} readings, last 7 days`
-      : "No readings in the last 7 days.";
+      ? t("tirLegend", {
+          in: Math.round(split.in),
+          below: Math.round(split.below),
+          above: Math.round(split.above),
+          n: series.length,
+        })
+      : t("noData7");
   }
   renderPattern($("pattern"), s);
   const note = $("rep-note");
   if (note) {
     const stored = (state.data?.series || []).length;
-    note.textContent = stored
-      ? `${stored} readings stored on this device (up to 15 days).`
-      : "Nothing stored yet — press Refresh.";
+    note.textContent = stored ? t("storedNote", { n: stored }) : t("nothingStored");
   }
 }
 
@@ -1246,7 +1714,7 @@ function buildPdf() {
   const lines = [];
   const avg = week.length ? week.reduce((a, p) => a + p.mgdl, 0) / week.length : null;
   lines.push(["Sokeri glucose report", 16, true]);
-  lines.push([`Generated ${new Date().toLocaleString("en-US")} · ${name}`, 10, false]);
+  lines.push([`Generated ${new Date().toLocaleString(locale())} · ${name}`, 10, false]);
   lines.push([
     `Range: last 7 days · ${week.length} readings · all values in ${unit}`,
     10,
@@ -1271,7 +1739,7 @@ function buildPdf() {
   if (!events.length) lines.push(["None logged.", 10, false]);
   for (const ev of events) {
     lines.push([
-      `${new Date(ev.ts).toLocaleString("en-US")} — ${EVENT_LABEL[ev.kind] || "Other"}`,
+      `${new Date(ev.ts).toLocaleString(locale())} — ${eventLabel(ev.kind)}`,
       10,
       false,
     ]);
@@ -1332,9 +1800,11 @@ function buildPdf() {
 function downloadPdf() {
   const btn = $("btn-pdf");
   if (!(state.data?.series || []).length) {
-    btn.textContent = "No data";
+    btn.dataset.busy = "1";
+    btn.textContent = t("noData");
     setTimeout(() => {
-      btn.textContent = "PDF report";
+      delete btn.dataset.busy;
+      btn.textContent = t("pdfReport");
     }, 2000);
     return;
   }
@@ -1348,9 +1818,11 @@ function downloadPdf() {
     URL.revokeObjectURL(a.href);
     a.remove();
   }, 500);
-  btn.textContent = "Saved ✓";
+  btn.dataset.busy = "1";
+  btn.textContent = t("saved");
   setTimeout(() => {
-    btn.textContent = "PDF report";
+    delete btn.dataset.busy;
+    btn.textContent = t("pdfReport");
   }, 2000);
 }
 

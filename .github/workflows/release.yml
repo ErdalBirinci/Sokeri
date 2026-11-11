@@ -1,0 +1,41 @@
+# Builds the extension ZIPs and attaches them to a GitHub Release.
+# Trigger: push a tag like v1.2.0 (npm-style semver, leading "v").
+name: Release extensions
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Validate
+        run: |
+          node tools/validate.js
+          node site/validate-site.js
+
+      - name: Build ZIPs
+        run: node tools/build-zips.js
+
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            site/sokeri-chrome-extension.zip
+            site/sokeri-dexcom-extension.zip
+          generate_release_notes: true

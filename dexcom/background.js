@@ -634,7 +634,46 @@ async function maybeAlert(data, settings) {
   );
 }
 
+/* Direct-audio fallback for browsers without offscreen documents (Firefox).
+   Service workers cannot play audio, so on Chrome this throws silently and
+   the offscreen path above is the one that sounds. */
+const BEEP_PATTERNS = {
+  low: [[932, 0, 0.16, 0.22], [622, 0.2, 0.28, 0.22]],
+  "low-urgent": [[932, 0, 0.16, 0.26], [622, 0.2, 0.28, 0.26], [932, 0.55, 0.16, 0.26], [622, 0.75, 0.32, 0.26]],
+  stale: [[440, 0, 0.3, 0.12]],
+  pred: [[784, 0, 0.14, 0.16], [988, 0.18, 0.2, 0.16]],
+  high: [[659, 0, 0.14, 0.2], [880, 0.18, 0.14, 0.2], [1175, 0.36, 0.3, 0.2]],
+};
+
+function playDirect(kind) {
+  const Ctor = window.AudioContext || window.webkitAudioContext;
+  const ctx = new Ctor();
+  if (ctx.state === "suspended") ctx.resume();
+  for (const [freq, delay, dur, gain] of BEEP_PATTERNS[kind] || BEEP_PATTERNS.high) {
+    const t0 = ctx.currentTime + delay;
+    const osc = ctx.createOscillator();
+    const g = ctx.createGain();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(freq, t0);
+    g.gain.setValueAtTime(0.0001, t0);
+    g.gain.exponentialRampToValueAtTime(gain, t0 + 0.015);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    osc.connect(g);
+    g.connect(ctx.destination);
+    osc.start(t0);
+    osc.stop(t0 + dur + 0.03);
+  }
+}
+
 async function beep(kind) {
+  if (!chrome.offscreen) {
+    try {
+      playDirect(kind);
+    } catch {
+      /* no audio in this context */
+    }
+    return;
+  }
   try {
     const contexts = await chrome.runtime.getContexts({
       contextTypes: ["OFFSCREEN_DOCUMENT"],
@@ -651,6 +690,62 @@ async function beep(kind) {
   } catch {
     /* ignore */
   }
+}
+
+/* ---------------------------------------------------------- CSV import */
+
+/** Tolerant reader parser: our own export plus generic timestamp/value files.
+ *  Returns [{ts, mgdl}] in mg/dL. Unit follows the header or the magnitude. */
+function parseImportCsv(text) {
+  const lines = String(text || "").split(/\r?\n/).filter((l) => l.trim());
+  if (lines.length < 2) return [];
+  const delim = lines[0].includes(";") ? ";" : ",";
+  const head = lines[0].toLowerCase().split(delim).map((c) => c.trim());
+  const tsIdx = head.findIndex((c) => /time|date|timestamp|iso/.test(c));
+  const valIdx = head.findIndex((c) => /glucose|value|mg|mmol|bg|sgv/.test(c));
+  if (tsIdx < 0 || valIdx < 0) return [];
+  const headerMmol = /mmol/.test(head[valIdx]);
+  const rows = [];
+  for (const line of lines.slice(1)) {
+    const cells = line.split(delim);
+    if (cells.length <= Math.max(tsIdx, valIdx)) continue;
+    const rawTs = cells[tsIdx].trim().replace(/^["']|["']$/g, "");
+    let ts = Date.parse(rawTs);
+    if (Number.isNaN(ts) && /^\d+$/.test(rawTs)) {
+      const num = Number(rawTs);
+      ts = rawTs.length > 11 ? num : num * 1000; // seconds vs milliseconds
+    }
+    const rawVal = Number(
+      String(cells[valIdx]).trim().replace(/^["']|["']$/g, "").replace(",", ".")
+    );
+    if (!Number.isFinite(ts) || !Number.isFinite(rawVal) || rawVal <= 0) continue;
+    rows.push({ ts, rawVal });
+  }
+  // Unit follows the header; without a hint the whole file's magnitude decides,
+  // so one extreme low in mg/dL is never mistaken for mmol/L.
+  const asMmol = headerMmol || (rows.length > 0 && Math.max(...rows.map((r) => r.rawVal)) <= 40);
+  const out = [];
+  for (const { ts, rawVal } of rows) {
+    const mgdl = asMmol ? Math.round(rawVal * MMOL) : Math.round(rawVal);
+    if (mgdl < 20 || mgdl > 700) continue;
+    out.push({ ts, mgdl });
+  }
+  return out;
+}
+
+async function importCsv(text) {
+  const pts = parseImportCsv(text);
+  if (!pts.length) return { ok: false, error: "empty" };
+  const prev = (await getData()) || {};
+  const map = new Map();
+  for (const p of [...(prev.series || []), ...pts]) {
+    if (p && Number.isFinite(p.ts) && Number.isFinite(p.mgdl)) map.set(p.ts, p);
+  }
+  const series = Array.from(map.values())
+    .filter((p) => p.ts >= Date.now() - SERIES_CAP_MS)
+    .sort((a, b) => a.ts - b.ts);
+  await saveData({ ...prev, series, fetchedAt: Date.now() });
+  return { ok: true, count: pts.length };
 }
 
 /* ------------------------------------------------------------- scheduler */
@@ -743,6 +838,9 @@ async function handleMessage(msg) {
       const r = await refresh();
       return { ...(await statePayload()), refreshOk: r.ok, error: r.error || null };
     }
+
+    case "importCsv":
+      return importCsv(msg?.text);
 
     case "saveSettings": {
       const settings = await saveSettings(msg.patch || {});

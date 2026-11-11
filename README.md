@@ -1,5 +1,10 @@
 # Sokeri
 
+![version](https://img.shields.io/badge/version-1.1.0-green)
+![platform](https://img.shields.io/badge/Chrome-Manifest%20V3-blue)
+![languages](https://img.shields.io/badge/UI-English%20%7C%20suomi-lightgrey)
+![license](https://img.shields.io/badge/license-MIT-green)
+
 Two Chrome extensions (Manifest V3) that track your glucose readings inside
 the browser, plus the landing page that presents them.
 
@@ -18,9 +23,10 @@ Both share the same panel: live value on the toolbar badge, trend arrow,
 variability), high/low threshold alerts with snooze, repeat, night escalation
 and a signal-loss watch, day/night thresholds and optional trend prediction
 (drawn on the chart), a reports view (TIR bar, pattern heatmap, PDF report,
-clinic mode), CSV export, event markers, mg/dL ↔ mmol/L conversion, and
-light/dark themes. See `libre/README.md` and `dexcom/README.md` for the
-edition manuals.
+clinic mode), CSV export **and CSV import**, event markers, mg/dL ↔ mmol/L
+conversion, light/dark themes, an **English/Finnish interface** with a
+first-run onboarding tour, and multi-person/multi-account tracking. See
+`libre/README.md` and `dexcom/README.md` for the edition manuals.
 
 ---
 
@@ -38,6 +44,13 @@ and the full-tab clinic mode:
 | ![Reports view](docs/screenshots/reports-dark.png) | ![Dexcom settings with account switcher](docs/screenshots/dexcom-settings.png) |
 
 ![Clinic mode](docs/screenshots/clinic-mode.png)
+
+## Demo
+
+A simulated day on the landing page — one hour per second (MP4, ~15 s,
+no sound, made-up data):
+
+<video src="docs/media/simulator.mp4" width="640" controls muted loop playsinline></video>
 
 ---
 
@@ -65,12 +78,20 @@ sokeri-project/
 │   ├── index.html
 │   ├── styles.css
 │   ├── main.js
-│   ├── validate-site.js
-│   └── *.zip               packaged editions for download
-└── tools/
-    ├── validate.js          extension checks: node tools/validate.js
-    └── generate-icons.js    icon painter: node tools/generate-icons.js [libre|dexcom]
+│   └── validate-site.js
+├── tools/
+│   ├── validate.js          extension checks: node tools/validate.js
+│   ├── generate-icons.js    icon painter: node tools/generate-icons.js [libre|dexcom]
+│   ├── sync-editions.js     keep dexcom/ in sync with libre/: --write
+│   ├── build-zips.js        packaged editions for download (site/*.zip)
+│   └── build-firefox.js     beta Firefox packages (see docs/firefox.md)
+├── docs/                    store-listing.md, launch-post.md, firefox.md, media/
+├── CHANGELOG.md
+└── LICENSE                  MIT
 ```
+
+Firefox is beta and untested here (no Firefox on the build machine):
+`node tools/build-firefox.js`, then follow `docs/firefox.md`.
 
 ---
 

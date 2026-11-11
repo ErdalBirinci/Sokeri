@@ -366,6 +366,7 @@ if (copyBtn) {
   }
   const DAY_MS = 30000;
   const HOLD_MS = 2500;
+  paint(2); // first frame immediately so hidden/paused tabs still show a chart
   let start = null;
   function frame(t) {
     if (start == null) start = t;

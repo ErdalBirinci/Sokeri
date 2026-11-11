@@ -20,21 +20,82 @@ const TREND = {
 
 const send = (msg) => chrome.runtime.sendMessage(msg);
 
+let lang = "en";
+const C_STR = {
+  en: {
+    inRange: "In range",
+    low: "Low",
+    high: "High",
+    noReading: "No reading",
+    lastReading: "Last reading {ago}",
+    steady: "steady",
+    rising: "rising",
+    falling: "falling",
+    riseFast: "rising fast",
+    fallFast: "falling fast",
+    justNow: "just now",
+    minAgo: "{n} min ago",
+    hrAgo: "{n} hr ago",
+    hrMinAgo: "{n} hr {m} min ago",
+    chartNote: "Last 24 hours · target {lo}–{hi}",
+    tir: "{in}% in range · {below}% low · {above}% high · {n} readings, last 7 days",
+    noData7: "No readings in the last 7 days.",
+    noData24: "No readings in the last 24 hours.",
+    readOnly:
+      "Read-only display. Not a medical device — confirm decisions on your sensor's own screen.",
+    refreshNote: "Refreshes every minute while this tab is open.",
+  },
+  fi: {
+    inRange: "Alueella",
+    low: "Matala",
+    high: "Korkea",
+    noReading: "Ei lukemaa",
+    lastReading: "Viimeisin lukema {ago}",
+    steady: "vakaa",
+    rising: "nousee",
+    falling: "laskee",
+    riseFast: "nousee nopeasti",
+    fallFast: "laskee nopeasti",
+    justNow: "juuri nyt",
+    minAgo: "{n} min sitten",
+    hrAgo: "{n} t sitten",
+    hrMinAgo: "{n} t {m} min sitten",
+    chartNote: "Viimeiset 24 tuntia · tavoite {lo}–{hi}",
+    tir: "{in}% alueella · {below}% matala · {above}% korkea · {n} lukemaa, viimeiset 7 päivää",
+    noData7: "Ei lukemia viimeisen 7 päivän aikana.",
+    noData24: "Ei lukemia viimeisen 24 tunnin aikana.",
+    readOnly:
+      "Vain lukunäkymä. Ei lääkinnällinen laite — varmista päätökset sensorisi omalta näytöltä.",
+    refreshNote: "Päivittyy minuutin välein tämän välilehden ollessa auki.",
+  },
+};
+
+function ct(key, vars) {
+  let s = (C_STR[lang] && C_STR[lang][key]) ?? C_STR.en[key] ?? key;
+  if (vars) {
+    for (const [k, v] of Object.entries(vars)) s = s.split(`{${k}}`).join(String(v));
+  }
+  return s;
+}
+
 function fmt(mgdl, unit) {
   return unit === "mmoll" ? (mgdl / MMOL).toFixed(1) : String(Math.round(mgdl));
 }
 
 function fmtTime(ts) {
-  return new Date(ts).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" });
+  return new Date(ts).toLocaleTimeString(lang === "fi" ? "fi-FI" : "en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 }
 
 function relTime(ts) {
   const minutes = Math.round((Date.now() - ts) / 60000);
-  if (minutes < 1) return "just now";
-  if (minutes < 60) return `${minutes} min ago`;
+  if (minutes < 1) return ct("justNow");
+  if (minutes < 60) return ct("minAgo", { n: minutes });
   const hours = Math.floor(minutes / 60);
   const rest = minutes % 60;
-  return rest ? `${hours} hr ${rest} min ago` : `${hours} hr ago`;
+  return rest ? ct("hrMinAgo", { n: hours, m: rest }) : ct("hrAgo", { n: hours });
 }
 
 function svgEl(name, attrs = {}) {
@@ -45,6 +106,12 @@ function svgEl(name, attrs = {}) {
 
 function render(payload) {
   const s = { low: 70, high: 180, ...(payload?.settings || {}) };
+  lang = s.lang === "fi" ? "fi" : "en";
+  document.documentElement.lang = lang;
+  const ro = document.getElementById("clinic-ro");
+  if (ro) ro.textContent = ct("readOnly");
+  const rf = document.getElementById("clinic-rf");
+  if (rf) rf.textContent = ct("refreshNote");
   const d = payload?.data || null;
   const unit = s.unit === "mmoll" ? "mmoll" : "mgdl";
   document.body.dataset.theme = s.theme === "light" ? "light" : "dark";
@@ -58,7 +125,7 @@ function render(payload) {
   const stateEl = $("state");
   if (!latest) {
     $("value").textContent = "—";
-    stateEl.textContent = d?.error || "No reading";
+    stateEl.textContent = d?.error || ct("noReading");
     stateEl.dataset.state = "none";
     $("trend").textContent = "";
     $("when").textContent = "";
@@ -69,14 +136,15 @@ function render(payload) {
     stateEl.dataset.state = kind;
     stateEl.textContent =
       kind === "none"
-        ? `Last reading ${relTime(latest.ts)}`
+        ? ct("lastReading", { ago: relTime(latest.ts) })
         : kind === "low"
-          ? "Low"
+          ? ct("low")
           : kind === "high"
-            ? "High"
-            : "In range";
+            ? ct("high")
+            : ct("inRange");
+    const trendKey = { 1: "fallFast", 2: "falling", 3: "steady", 4: "rising", 5: "riseFast" }[latest.trend];
     const trend = TREND[latest.trend];
-    $("trend").textContent = trend ? `${trend[0]} ${trend[1]}` : "";
+    $("trend").textContent = trend && trendKey ? `${trend[0]} ${ct(trendKey)}` : "";
     $("when").textContent = `${fmtTime(latest.ts)} (${relTime(latest.ts)})`;
   }
 
@@ -90,7 +158,7 @@ function renderChart(series, s, unit) {
   const from = Date.now() - 24 * 3600 * 1000;
   const points = series.filter((p) => p.ts >= from);
   if (points.length < 2) {
-    host.textContent = "No readings in the last 24 hours.";
+    host.textContent = ct("noData24");
     return;
   }
   const W = 860;
@@ -141,7 +209,7 @@ function renderChart(series, s, unit) {
   const last = points[points.length - 1];
   const color = last.mgdl <= s.low ? "#ff5c5c" : last.mgdl >= s.high ? "#ffb020" : "#3ddc97";
   svg.appendChild(svgEl("circle", { cx: X(last.ts), cy: Y(last.mgdl), r: 6, fill: color }));
-  $("chart-note").textContent = `Last 24 hours · target ${fmt(s.low, unit)}–${fmt(s.high, unit)}`;
+  $("chart-note").textContent = ct("chartNote", { lo: fmt(s.low, unit), hi: fmt(s.high, unit) });
   host.appendChild(svg);
 }
 
@@ -150,7 +218,7 @@ function renderTir(series, s) {
   const from = Date.now() - 7 * 86400000;
   const pts = series.filter((p) => p.ts >= from);
   if (!pts.length) {
-    el.textContent = "No readings in the last 7 days.";
+    el.textContent = ct("noData7");
     return;
   }
   let below = 0;
@@ -161,10 +229,12 @@ function renderTir(series, s) {
   }
   const inside = pts.length - below - above;
   const pct = (n) => Math.round((n / pts.length) * 100);
-  el.innerHTML = "";
-  const strong = document.createElement("strong");
-  strong.textContent = `${pct(inside)}% in range`;
-  el.append(strong, ` · ${pct(below)}% low · ${pct(above)}% high · ${pts.length} readings, last 7 days`);
+  el.textContent = ct("tir", {
+    in: pct(inside),
+    below: pct(below),
+    above: pct(above),
+    n: pts.length,
+  });
 }
 
 async function load() {

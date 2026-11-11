@@ -787,6 +787,11 @@ h1 {
   min-width: 0;
 }
 
+.duo .seg button {
+  padding-left: 0.45rem;
+  padding-right: 0.45rem;
+}
+
 .duo input {
   font: inherit;
   color: var(--text);
@@ -961,6 +966,61 @@ body[data-compact="3"] .actions button {
 .duo .check-inline {
   min-height: 2.25rem;
   font-size: 0.8125rem;
+}
+
+/* ------------------------------------------------------------ onboarding */
+
+.onboard {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background: rgba(8, 10, 12, 0.72);
+  z-index: 5;
+}
+
+body[data-theme="light"] .onboard {
+  background: rgba(251, 248, 243, 0.82);
+}
+
+.onboard-card {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-radius: 12px;
+  padding: 1rem 1.1rem 1.1rem;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+}
+
+.onboard-step {
+  font-size: 0.75rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.onboard-card h2 {
+  font-size: 1rem;
+  font-weight: 650;
+  margin: 0.25rem 0 0.4rem !important;
+}
+
+.onboard-card p {
+  font-size: 0.8125rem;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.onboard-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+#view-app {
+  position: relative;
 }
 
 /* --------------------------------------------------- motion preference */

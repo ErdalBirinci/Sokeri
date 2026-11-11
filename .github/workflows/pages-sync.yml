@@ -1,0 +1,40 @@
+# Keeps the gh-pages branch (what GitHub Pages serves) in sync with site/.
+# Trigger: any push to main that touches site/.
+name: Sync landing page
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "site/**"
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Copy site to gh-pages root
+        run: |
+          set -e
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          TMPDIR="$(mktemp -d)"
+          cp -r site/. "$TMPDIR/"
+          git checkout gh-pages
+          git rm -qr .
+          cp -r "$TMPDIR/." .
+          rm -rf "$TMPDIR"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No changes to publish."
+          else
+            git commit -m "Publish site from main (${GITHUB_SHA::7})"
+            git push origin gh-pages
+          fi
