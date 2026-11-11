@@ -1,6 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 56" role="img" aria-label="Dexcom">
-  <rect x="1" y="1" width="218" height="54" rx="12" fill="#101418"/>
-  <path d="M14 34 L24 34 L28 22 L33 42 L37 30 L41 34 L50 34" fill="none" stroke="#3ddc97" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-  <text x="60" y="27" font-family="Verdana, Geneva, sans-serif" font-size="16" font-weight="bold" fill="#ffffff">Dexcom</text>
-  <text x="60" y="42" font-family="Verdana, Geneva, sans-serif" font-size="9.5" fill="#9aa4ae">G6 · G7 CGM systems</text>
-</svg>
